@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <import type="android.util.SparseArray"/>
+
+        <import type="java.util.Map"/>
+
+        <import type="java.util.List"/>
+
+        <variable
+            name="list"
+            type="List"/>
+
+        <variable
+            name="map"
+            type="Map"/>
+
+        <variable
+            name="sparse"
+            type="SparseArray&lt;String>"/>
+
+        <variable
+            name="user"
+            type="com.mvvm.model.User"/>
+
+        <variable
+            name="index"
+            type="int"/>
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="5dp"
+                android:text="@{user.userName ?? user.realName}"
+                android:textSize="12dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#20000000"
+                android:onClick="coalescingSample"
+                android:padding="5dp"
+                android:text="Null Coalescing Operator"
+                android:textSize="12dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="5dp"
+                android:text="@{sparse[index]}"
+                android:textSize="12dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#20000000"
+                android:onClick="collectionSample"
+                android:padding="5dp"
+                android:text="Get From Collection"
+                android:textSize="12dp"/>
+        </LinearLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_follow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:drawableLeft="@{user.isFollow ? @drawable/ic_like_yellowfull : @drawable/ic_like_yellow}"
+                android:drawablePadding="5dp"
+                android:text="@{user.isFollow ? `已关注` : `未关注`}"
+                android:textSize="12dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="#20000000"
+                android:onClick="followUser"
+                android:padding="5dp"
+                android:text="@{user.isFollow ? `UnFollow User` : `Follow User`}"
+                android:textSize="12dp"/>
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
+</layout>
