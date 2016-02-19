@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">AndroidMvvmSample</string>
+
+
+    <!-- string format-->
+    <string name="name_format">姓名: %1$s</string>
+    <string name="mobile_format">手机号: %1s</string>
+    <string name="contributor_count_format">贡献次数: %1d</string>
+
+    <string name="data_binding_observable">如果(某个)字段发生变化.\n
+    1,通过User继承BaseObservable实现\n
+    2,通过ObservableField方式实现\n
+    3,通过Observable Collections的方式 如:ObservableArrayMap\n
+    4,当然可以通过binding.setUser(user) [相当于所有的View重新设置一遍]</string>
+</resources>
