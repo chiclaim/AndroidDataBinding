@@ -11,7 +11,7 @@ import java.io.Serializable;
 /**
  * Created by chiclaim on 2016/02/18
  */
-public class User extends BaseObservable implements Serializable {
+public class User extends BaseObservable{
 
     private String userName;
     private String realName;

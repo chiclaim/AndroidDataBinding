@@ -66,8 +66,369 @@ MVC->MVP->MVVP
 ##Android中如何实现MVVM架构？
 Google在2015年的已经为我们DataBinding技术。下面就详细讲解如何使用DataBinding。
 
+### 环境准备
+在工程根目录build.gradle文件加入如下配置，把Android Gradle 插件升级到最新：
 
-待续。。。。。。
+	dependencies {
+        classpath 'com.android.tools.build:gradle:1.5.0'
+    }
+   
+
+
+在app里的build.gradle文件加入如下配置，启用data binding 功能：
+
+
+    dataBinding {
+        enabled true
+    }
+
+
+### 来个简单的例子
+实现一个简单的功能，效果如下：
+
+![Alt text](http://chuantu.biz/t2/26/1455968115x-1566701610.png "MVP Image")
+
+
+####data binding 布局格式和以往的有些区别：
+
+```
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+   <data>
+       <variable name="user" type="com.example.User"/>
+   </data>
+   
+   //normal layout
+   <TextView android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="@{user.firstName}"/>
+</layout>
+```
+
+
+- 布局的根节点为<layout/>
+
+- 布局里使用的model 通过<data>中的<variable>指定：
+
+  ```
+     <variable name="user" type="com.example.User"/>
+  
+  ```
+
+- 设置空间属性的值，通过@{}语法来设置：
+
+  ```
+     android:text="@{user.firstName}"
+
+  ```
+
+下面是完整的布局实现：
+
+```
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="user"
+            type="com.mvvm.model.User"/>
+    </data>
+
+    <LinearLayout
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp"
+        tools:context=".ui.MainActivity">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{user.realName}"
+            android:textSize="14dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@{user.mobile}"
+            android:textSize="14dp"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{String.valueOf(user.age)}"
+            android:textSize="14dp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="15dp"
+            android:layout_marginBottom="40dp"
+            android:layout_marginTop="40dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+
+                android:layout_weight="1"
+                android:background="@android:color/darker_gray"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="With String Format"
+                android:textSize="10dp"
+                android:textStyle="bold"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_weight="1"
+                android:background="@android:color/darker_gray"/>
+
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_realName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{@string/name_format(user.realName)}"
+            android:textSize="14dp"/>
+
+        <TextView
+            android:id="@+id/tv_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@{@string/mobile_format(user.mobile)}"
+            android:textSize="14dp"/>
+
+    </LinearLayout>
+</layout>
+
+
+
+```
+
+- 以<layout/>为根节点布局 android studio都会自动产生一个Binding类。类名为根据布局名产生，如一个名为activity_simple的布局，它的Binding类为ActivitySimpleBinding。
+
+- 如果控件设置了id，那么该控件也可以在binding类中找到，这样就不需要findViewById来获取View了。
+
+
+
+
+####接下来实现数据模型类User：
+
+```
+public class User {
+
+    private String userName;
+    private String realName;
+    private String mobile;
+    private int age;
+
+    public User(String realName, String mobile) {
+        this.realName = realName;
+        this.mobile = mobile;
+    }
+
+    public User() {
+    }
+    
+    //ignore getter and setter. see code for detail.
+
+}
+
+```
+
+####在Activity中 绑定数据
+
+```
+	@Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_simple);
+        fetchData();
+    }
+    
+    //模拟获取数据
+    private void fetchData() {
+        new AsyncTask<Void, Void, Void>() {
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                showLoadingDialog();
+            }
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+                hideLoadingDialog();
+                User user = new User("Chiclaim", "13512341234");
+                binding.setUser(user);
+                //binding.setVariable(com.mvvm.BR.user, user);
+            }
+        }.execute();
+    }
+}
+
+```
+
+
+> 通过DataBindingUtil.setContentView设置布局，通过binding类设置数据模型。
+
+```
+binding.setUser(user);
+
+```
+
+
+### DataBinding Obervable 
+在上面的一个例子上，数据是不变，随着用户的与app的交互，数据发生了变化，如何更新某个控件的值呢？
+
+有如下几种方案(具体实现下载代码，运行，点击DataBinding Observable 按钮)：
+
+1. BaseObservable的方式
+
+使User继承BaseObservable，在get方法上加上注解@Bindable，会在BR(BR类自动生成的)生成该字段标识(int)
+set方法里notifyPropertyChanged(BR.field);
+
+```
+public class User extends BaseObservable{
+
+    private String userName;
+    private String realName;
+
+    /**
+     * 注意: 在BR里对应的常量为follow
+     */
+    private boolean isFollow;
+
+
+    public User(String realName, String mobile) {
+        this.realName = realName;
+        this.mobile = mobile;
+    }
+
+    public User() {
+    }
+
+    @Bindable
+    public boolean isFollow() {
+        return isFollow;
+    }
+
+    public void setIsFollow(boolean isFollow) {
+        this.isFollow = isFollow;
+        notifyPropertyChanged(BR.follow);
+    }
+
+    @Bindable
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+        notifyPropertyChanged(BR.userName);
+    }
+
+```
+
+> 如果数据发生变化通过set方法，view的值会自动更新，是不是很方便。
+
+
+2. 通过ObserableField来实现
+
+```
+public class UserField {
+    public final ObservableField<String> realName = new ObservableField<>();
+    public final ObservableField<String> mobile = new ObservableField<>();
+
+}
+
+```
+
+布局中使用：
+
+```
+   <variable name="fields" type="com.mvvm.model.UserField"/>
+   
+   <TextView
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:background="@null"
+       android:text="@{fields.realName}"
+       android:textSize="14dp"/>
+
+```
+
+代码中设置/改变数据：
+
+```
+userField.realName.set("Chiclaim");
+
+```
+
+3. Observable Collections方式：
+
+```
+private ObservableArrayMap<String, Object> map = new ObservableArrayMap();
+
+//设置数据
+map.put("realName", "Chiclaim");
+map.put("mobile", "110");
+
+
+```
+
+布局中使用：
+
+```
+   <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="@{collection[`mobile`]}"
+        android:textSize="14dp"
+        android:textStyle="bold"/>
+
+```
+
+### 下面通过DataBinding来实现列表
+
+获取square公司retrofit代码贡献者数据列表，通过RecyclerView来实现，效果如下所示：
+
+![Alt text](http://chuantu.biz/t2/26/1455966145x-1566701690.png "MVP Image")
+
+
+
+
+
+
+
+
+
 
 
 
