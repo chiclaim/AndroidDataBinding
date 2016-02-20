@@ -295,11 +295,10 @@ public class User {
 ```
 
 
-> 通过DataBindingUtil.setContentView设置布局，通过binding类设置数据模型。
+> 通过DataBindingUtil.setContentView设置布局，通过binding类设置数据模型:
 
 ```
 binding.setUser(user);
-
 ```
 
 
@@ -352,7 +351,6 @@ public class User extends BaseObservable{
         this.userName = userName;
         notifyPropertyChanged(BR.userName);
     }
-
 ```
 
 > 如果数据发生变化通过set方法，view的值会自动更新，是不是很方便。
@@ -422,8 +420,65 @@ map.put("mobile", "110");
 ![Alt text](http://chuantu.biz/t2/26/1455966145x-1566701690.png "MVP Image")
 
 
+RecyclerView的Adapter实现的核心方法为两个onCreateViewHolder、onBindViewHolder方法和Item的ViewHolder。
+
+```
+    @Override
+    public RecyclerView.ViewHolder onMyCreateViewHolder(ViewGroup parent, int viewType) {
+        ItemContributorBinding binding = DataBindingUtil.inflate(inflater, R.layout.item_contributor, parent, false);
+        ContributorViewHolder viewHolder = new ContributorViewHolder(binding.getRoot());
+        viewHolder.setBinding(binding);
+        return viewHolder;
+    }
+
+    @Override
+    public void onMyBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+        ContributorViewHolder contributorViewHolder = (ContributorViewHolder) viewHolder;
+        Contributor contributor = getModel(position);
+        contributorViewHolder.getBinding().setVariable(com.mvvm.BR.contributor, contributor);
+        contributorViewHolder.getBinding().executePendingBindings();
+        Picasso.with(mContext).load(contributor.getAvatar_url()).
+                into(contributorViewHolder.binding.ivAvatar);
+    }
 
 
+```
+
+Item对应的VIewHolder
+
+```
+    public class ContributorViewHolder extends RecyclerView.ViewHolder {
+
+        ItemContributorBinding binding;
+
+        public void setBinding(ItemContributorBinding binding) {
+            this.binding = binding;
+        }
+
+        public ItemContributorBinding getBinding() {
+            return binding;
+        }
+
+        public ContributorViewHolder(View itemView) {
+            super(itemView);
+        }
+    }
+
+
+```
+
+### EL表达式(Expression Language)
+--------------
+
+#### 聚合判断（Null Coalescing Operator）语法 ‘？？’
+>      <TextView
+>         android:layout_width="wrap_content"
+>         android:layout_height="wrap_content"
+>         android:padding="5dp"
+>         android:text="@{user.userName ?? user.realName}"
+>         android:textSize="12dp"/>
+
+上面的意思是如果userName为null，则显示realName。
 
 
 
