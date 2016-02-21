@@ -12,6 +12,10 @@
         <import type="java.util.List"/>
 
         <variable
+            name="book1"
+            type="com.mvvm.model.Book"/>
+
+        <variable
             name="list"
             type="List"/>
 
@@ -30,6 +34,10 @@
         <variable
             name="index"
             type="int"/>
+
+        <variable
+            name="event"
+            type="com.mvvm.event.UserFollowEvent"/>
 
     </data>
 
@@ -110,7 +118,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:background="#20000000"
-                android:onClick="followUser"
+                android:onClick="@{user.isFollow ? event.unFollow : event.follow}"
                 android:padding="5dp"
                 android:text="@{user.isFollow ? `UnFollow User` : `Follow User`}"
                 android:textSize="12dp"/>

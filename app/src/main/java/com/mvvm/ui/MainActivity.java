@@ -2,8 +2,10 @@ package com.mvvm.ui;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.View;
 
+import com.mvvm.BR;
 import com.mvvm.R;
 
 /**
@@ -20,6 +22,8 @@ public class MainActivity extends BaseActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(false);
         }
+
+        Log.d("MainActivuty", BR.book1+"");
     }
 
     public void simpleSample(View view) {

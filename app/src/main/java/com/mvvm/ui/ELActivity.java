@@ -9,12 +9,13 @@ import android.view.View;
 
 import com.mvvm.R;
 import com.mvvm.databinding.ActivityElBinding;
+import com.mvvm.event.UserFollowEvent;
 import com.mvvm.model.User;
 
 /**
  * Created by chiclaim on 2016/02/19
  */
-public class ELActivity extends BaseActivity {
+public class ELActivity extends BaseActivity implements UserFollowEvent{
 
     //Null Coalescing Operator
     //Collections
@@ -50,6 +51,8 @@ public class ELActivity extends BaseActivity {
 
         binding.setIndex(index);
         binding.setSparse(sparseArray);
+
+        binding.setEvent(this);
     }
 
 
@@ -73,9 +76,13 @@ public class ELActivity extends BaseActivity {
         }
     }
 
-    public void followUser(View view) {
-        user.setIsFollow(!user.isFollow());
+    @Override
+    public void follow(View view) {
+        user.setIsFollow(true);
     }
 
-
+    @Override
+    public void unFollow(View view) {
+        user.setIsFollow(false);
+    }
 }

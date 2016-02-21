@@ -219,11 +219,6 @@ Google在2015年的已经为我们DataBinding技术。下面就详细讲解如�
 
 ```
 
-- 以<layout/>为根节点布局 android studio都会自动产生一个Binding类。类名为根据布局名产生，如一个名为activity_simple的布局，它的Binding类为ActivitySimpleBinding。
-
-- 如果控件设置了id，那么该控件也可以在binding类中找到，这样就不需要findViewById来获取View了。
-
-
 
 
 ####接下来实现数据模型类User：
@@ -302,7 +297,111 @@ binding.setUser(user);
 ```
 
 
-### DataBinding Obervable 
+### 布局详解
+
+#### import导入
+- 通过<import>标签导入：
+
+	```
+	<data>
+    	<import type="android.view.View"/>
+    	<import type="com.mvvm.model.User"/>
+    	<variable name="user" type="User">
+	</data>
+	android:visibility="@{user.isAdult ? View.VISIBLE : View.GONE}"
+	```
+
+- 如果产生了冲突可以使用别名的方式：
+
+	```
+	<import type="com.example.User"/>
+	<import type="com.mvvm.model.User" alias="MyUser"/>
+	<variable name="user" type="User">
+	<variable name="user" type="MyUser">
+	```
+
+- 集合泛型左尖括号需要使用转译：
+
+	```
+	<import type="com.example.User"/>
+    <import type="java.util.List"/>
+    <variable name="user" type="User"/>
+    <variable name="userList" type="List&lt;User>"/>
+	
+	```
+
+- 使用导入类的静态字段和方法：
+
+	```
+	<data>
+    	<import type="com.example.MyStringUtils"/>
+    	<variable name="user" type="com.example.User"/>
+	</data>
+	…
+	<TextView
+   		android:text="@{MyStringUtils.capitalize(user.lastName)}"
+   		android:layout_width="wrap_content"
+   		android:layout_height="wrap_content"/>
+	
+	```
+
+> 像JAVA一样，java.lang.*是自动导入的。
+
+
+
+#### Variables
+在<data>节点中使用<varibale>来设置。
+
+```
+<import type="android.graphics.drawable.Drawable"/>
+<variable name="user"  type="com.example.User"/>
+<variable name="image" type="Drawable"/>
+<variable name="note"  type="String"/>
+
+```
+
+- Binding类里将会包含通过variable设置name的getter和setter方法。如上面的setUser，getUser等。
+
+- 如果控件设置了id，那么该控件也可以在binding类中找到，这样就不需要findViewById来获取View了。
+
+#### 自定义Binding类名(Custom Binding Class Names)
+
+以<layout/>为根节点布局，android studio默认会自动产生一个Binding类。类名为根据布局名产生，如一个名为activity_simple的布局，它的Binding类为ActivitySimpleBinding，所在包为app_package/databinding。
+当然也可以自定义Binding类的名称和包名：
+
+  1. `<data class="CustomBinding"></data>` 在app_package/databinding下生成CustomBinding；
+  
+  2. `<data class=".CustomBinding"></data>` 在app_package下生成CustomBinding；
+  
+  3. `<data class="com.example.CustomBinding"></data>` 明确指定包名和类名。
+
+
+
+#### Includes
+```
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:bind="http://schemas.android.com/apk/res-auto">
+   <data>
+       <variable name="user" type="com.example.User"/>
+   </data>
+   <LinearLayout
+       android:orientation="vertical"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent">
+       <include layout="@layout/name"
+           bind:user="@{user}"/>
+       <include layout="@layout/contact"
+           bind:user="@{user}"/>
+   </LinearLayout>
+</layout>
+
+```
+
+name.xml 和 contact.xml都必须包含  ` <variable name="user" ../>`
+
+### DataBinding Obervable
+
 在上面的一个例子上，数据是不变，随着用户的与app的交互，数据发生了变化，如何更新某个控件的值呢？
 
 有如下几种方案(具体实现下载代码，运行，点击DataBinding Observable 按钮)：
@@ -444,6 +543,12 @@ RecyclerView的Adapter实现的核心方法为两个onCreateViewHolder、onBindV
 
 ```
 
+通过setVariable方法来关联数据。
+getBinding().setVariable(com.mvvm.BR.contributor, contributor)
+大家看到BR.contributor的contributor常量是怎么产生的？布局里的<variable name="">中的name属性值。如：<variable name="book"> 那么就会自动生成BR.book。`有点类似以前的R里面的id`。 有人会问了如果别的实体（model）也有相同的book属性怎么办？那他到底使用哪个呢？其实这是不会冲突，因为在不用的地方用，他的上下文(Binging)不一样，所以不会冲突。也是和以前的R里面的常量是一回事情。只是把它放到BR里面去了。所以我猜想BR的全称应该是（`Binding R`(R就是以前我们用的常量类)）虽然官方没有说明。
+
+通过executePendingBindings强制执行绑定数据。
+
 Item对应的VIewHolder
 
 ```
@@ -468,23 +573,102 @@ Item对应的VIewHolder
 ```
 
 ### EL表达式(Expression Language)
---------------
 
-#### 聚合判断（Null Coalescing Operator）语法 ‘？？’
->      <TextView
->         android:layout_width="wrap_content"
->         android:layout_height="wrap_content"
->         android:padding="5dp"
->         android:text="@{user.userName ?? user.realName}"
->         android:textSize="12dp"/>
+####DataBinding支持的表达式有：
+
+数学表达式： + - / * %
+
+字符串拼接 +
+
+逻辑表达式 && ||
+
+位操作符 & | ^
+
+一元操作符 + - ! ~
+
+位移操作符 >> >>> <<
+
+比较操作符 == > < >= <=
+
+instanceof
+
+分组操作符 ()
+
+字面量 - character, String, numeric, null
+
+强转、方法调用
+
+字段访问
+
+数组访问 []
+
+三元操作符 ?:
+
+#### 聚合判断（Null Coalescing Operator）语法 ‘??’
+      <TextView
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:padding="5dp"
+         android:text="@{user.userName ?? user.realName}"
+         android:textSize="12dp"/>
 
 上面的意思是如果userName为null，则显示realName。
 
+#### Resource（资源相关）
+在DataBinding语法中，可以吧resource作为其中的一部分。如：
 
+```
+android:padding="@{large? @dimen/largePadding : @dimen/smallPadding}"
 
+```
 
+除了支持dimen，还支持color、string、drawable、anim等。
 
+注意，对mipmap图片资源支持还是有问题，目前只支持drawable。
 
+#### Event Binding (事件绑定)
+
+事件处理器：
+
+```
+public interface UserFollowEvent {
+    void follow(View view);
+    void unFollow(View view);
+}
+
+```
+
+布局中使用：
+
+```
+<variable
+     name="event"
+     type="com.mvvm.event.UserFollowEvent"/>
+     
+android:onClick="@{user.isFollow ? event.unFollow : event.follow}"
+```
+
+在Activity实现该接口UserFollowEvent：
+
+```
+    @Override
+    public void follow(View view) {
+        user.setIsFollow(true);
+    }
+
+    @Override
+    public void unFollow(View view) {
+        user.setIsFollow(false);
+    }
+```
+
+效果如下所示：
+
+![Alt text](http://chuantu.biz/t2/26/1456026854x-954497741.png "")
+
+点击按钮后：
+
+![Alt text](http://chuantu.biz/t2/26/1456026892x1822611375.png "MVP Image")
 
 
 
