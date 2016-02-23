@@ -46,4 +46,11 @@ dependencies {
 
     //image utils
     compile 'com.squareup.picasso:picasso:2.5.2'
+
+    //RxJava
+    compile 'io.reactivex:rxandroid:1.0.1'
+    compile 'io.reactivex:rxjava:1.0.14'
+    compile 'io.reactivex:rxjava-math:1.0.0'
+    compile 'com.jakewharton.rxbinding:rxbinding:0.2.0'
+
 }

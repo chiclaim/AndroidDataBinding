@@ -1,5 +1,6 @@
 package com.mvvm.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.util.Log;
@@ -23,7 +24,7 @@ public class MainActivity extends BaseActivity {
             actionBar.setDisplayHomeAsUpEnabled(false);
         }
 
-        Log.d("MainActivuty", BR.book1+"");
+        Log.d("MainActivuty", BR.book1 + "");
     }
 
     public void simpleSample(View view) {
@@ -43,4 +44,8 @@ public class MainActivity extends BaseActivity {
     }
 
 
+    public void customSetter(View view) {
+        Intent intent = new Intent(this, CustomSetterActivity.class);
+        startActivity(intent);
+    }
 }

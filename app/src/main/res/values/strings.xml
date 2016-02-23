@@ -12,4 +12,11 @@
     2,通过ObservableField方式实现\n
     3,通过Observable Collections的方式 如:ObservableArrayMap\n
     4,当然可以通过binding.setUser(user) [相当于所有的View重新设置一遍]</string>
+
+    <string name="custom_setter_note">
+        1,最新版本的 dataBinding插件 在设置background 会自动把color转成ColorDrawable
+        所以不需要以下转换方法,如果创建了该方法,系统则会调用.\n
+        2,设置大小的时候也不需要强转成int,\n如@{user.isFollow ? @dimen/follow : @dimen/unfollow.\n
+        3,通过dataBinding表达式设置dimen的时候IDE提示错误,但是运行没有问题.下个版本google应该会解决.
+    </string>
 </resources>
