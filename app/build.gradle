@@ -25,7 +25,8 @@ android {
 }
 
 repositories {
-    maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
 
 }
 
@@ -37,9 +38,13 @@ dependencies {
 
     //http module
     //snapshot worked with okhttp3.0.1
-    compile 'com.squareup.retrofit2:retrofit:2.0.0-SNAPSHOT'
-    compile 'com.squareup.retrofit2:converter-gson:2.0.0-SNAPSHOT'
-    compile 'com.squareup.retrofit2:retrofit-converters:2.0.0-SNAPSHOT'
+    //compile 'com.squareup.retrofit2:retrofit:2.0.0-beta4'
+    //compile 'com.squareup.retrofit2:converter-gson:2.0.0-beta4'
+
+    //compile 'com.squareup.retrofit2:retrofit:2.0.0-SNAPSHOT'
+    //compile 'com.squareup.retrofit2:converter-gson:2.0.0-SNAPSHOT'
+    //compile 'com.squareup.retrofit2:retrofit-converters:2.0.0-SNAPSHOT'
+
     compile 'com.squareup.okhttp3:okhttp:3.0.1'
     compile 'com.squareup.okhttp3:okhttp-urlconnection:3.0.1'
     compile 'com.squareup.okhttp3:logging-interceptor:3.0.1'

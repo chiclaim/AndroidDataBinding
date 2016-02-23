@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data class="CustomSetterBinding">
 
         <variable
-            name="user"
-            type="com.mvvm.model.User"/>
+            name="avatar"
+            type="String"/>
+
+        <variable
+            name="errorAvatar"
+            type="String"/>
+
+        <variable
+            name="leftPadding"
+            type="int"/>
 
         <variable
             name="userFollowEvent"
@@ -18,11 +27,11 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="5dp"
-            android:text="@string/custom_setter_note"
             android:textSize="12dp"/>
 
         <LinearLayout
@@ -33,20 +42,68 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@{user.isFollow ? @color/red : @color/white}"
+                android:background="@{@color/red}"
                 android:gravity="center"
-                android:padding="@{@dimen/padding}"
-                android:text="@{user.isFollow ? `UnFollow`:`Follow`,default=`Follow`}"
-                android:textColor="@{user.isFollow ? @color/black : @color/blue}"
-                android:textSize="@{user.isFollow ? @dimen/follow : @dimen/unfollow}"/>
+                android:paddingLeft="@{leftPadding}"
+                android:text="leftPadding"
+                android:textSize="12sp"/>
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:onClick="@{user.isFollow ? userFollowEvent.unFollow : userFollowEvent.follow}"
-                android:text="@{user.isFollow ? `UnFollow`:`Follow` ,default=`Follow`}"/>
+                android:onClick="setLeftPadding"
+                android:text="Setter For android:paddingLeft"
+                android:textAllCaps="false"
+                android:textSize="12sp"/>
+
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="#f0f0f0"
+                app:imageUrl="@{avatar}"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:onClick="loadOtherImage"
+                android:text="Setter For ImageView Load Image"
+                android:textAllCaps="false"
+                android:textSize="12sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="#f0f0f0"
+                app:error="@{@drawable/erorr_loading}"
+                app:imageUrl="@{errorAvatar}"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:onClick="loadRightImage"
+                android:text="Setter For ImageView Load Image When Error"
+                android:textAllCaps="false"
+                android:textSize="12sp"/>
+        </LinearLayout>
+
 
     </LinearLayout>
 </layout>

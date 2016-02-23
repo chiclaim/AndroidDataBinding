@@ -40,8 +40,14 @@
             android:screenOrientation="portrait"/>
 
         <activity
+            android:name=".ui.ConverterActivity"
+            android:label="Converter"
+            android:screenOrientation="portrait"/>
+
+
+        <activity
             android:name=".ui.CustomSetterActivity"
-            android:label="Custom Setter"
+            android:label="CustomSetter"
             android:screenOrientation="portrait"/>
 
 

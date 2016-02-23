@@ -36,10 +36,19 @@
         android:layout_height="wrap_content"
         android:textAllCaps="false"
         android:text="Expression Language"/>
+
+    <Button
+        android:onClick="converter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAllCaps="false"
+        android:text="Converter"/>
+
+
     <Button
         android:onClick="customSetter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAllCaps="false"
-        android:text="Custom Setter"/>
+        android:text="Custom Setting"/>
 </LinearLayout>

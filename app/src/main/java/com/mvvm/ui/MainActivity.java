@@ -44,6 +44,11 @@ public class MainActivity extends BaseActivity {
     }
 
 
+    public void converter(View view) {
+        Intent intent = new Intent(this, ConverterActivity.class);
+        startActivity(intent);
+    }
+
     public void customSetter(View view) {
         Intent intent = new Intent(this, CustomSetterActivity.class);
         startActivity(intent);
