@@ -32,6 +32,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="5dp"
+            android:text="Please see log by filter `BindingAdapter`"
+            android:textColor="@color/red"
             android:textSize="12dp"/>
 
         <LinearLayout
@@ -102,6 +104,26 @@
                 android:text="Setter For ImageView Load Image When Error"
                 android:textAllCaps="false"
                 android:textSize="12sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Custom Setter setText By Span: "/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:spanText="@{`Hello Custom Setter`}"/>
+
+
         </LinearLayout>
 
 

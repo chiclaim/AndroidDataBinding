@@ -4,9 +4,13 @@ import android.databinding.BindingAdapter;
 import android.databinding.DataBindingUtil;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.TextAppearanceSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.mvvm.R;
 import com.mvvm.databinding.CustomSetterBinding;
@@ -91,6 +95,19 @@ public class CustomSetterActivity extends BaseActivity {
     public static void loadImage(ImageView view, String url, Drawable error) {
         Log.d("BindingAdapter", "loadImage(ImageView view, String url,Drawable error)");
         Picasso.with(view.getContext()).load(url).error(error).into(view);
+    }
+
+    @BindingAdapter("spanText")
+    public static void setText(TextView textView, String value) {
+        Log.d("BindingAdapter", "setText(TextView textView,String value)");
+        SpannableString styledText = new SpannableString(value);
+        styledText.setSpan(new TextAppearanceSpan(textView.getContext(), R.style.style0),
+                0, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        styledText.setSpan(new TextAppearanceSpan(textView.getContext(), R.style.style1),
+                5, 12, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        styledText.setSpan(new TextAppearanceSpan(textView.getContext(), R.style.style0),
+                12, value.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        textView.setText(styledText, TextView.BufferType.SPANNABLE);
     }
 
     public void setLeftPadding(View view) {
