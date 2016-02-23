@@ -668,8 +668,74 @@ android:onClick="@{user.isFollow ? event.unFollow : event.follow}"
 
 点击按钮后：
 
-![Alt text](http://chuantu.biz/t2/26/1456026892x1822611375.png "MVP Image")
+![Alt text](http://chuantu.biz/t2/26/1456026892x1822611375.png "Image")
 
 
+### Custom Setter（自定义Setter方法）
+有些时候我们需要自定义binding逻辑,如:在一个TextView上设置大小不一样的文字,这个时候就需要我们自定义binding逻辑了.
 
+在比如我们为ImageView加载图片，通过总是通过类似这样的的代码来实现：
+
+```
+Picasso.with(view.getContext()).load(url).into(view);
+```
+如果我们自定Setter方法，那么这些都可以是自动的。怎么实现呢？
+
+```
+@BindingAdapter({"imageUrl"})
+public static void loadImage(ImageView view, String url) {
+      Log.d("BindingAdapter", "loadImage(ImageView view, String url)");
+      Log.d("BindingAdapter", url + "");
+      Picasso.with(view.getContext()).load(url).into(view);
+}
+```
+@BindingAdapter({"imageUrl"}) 这句话意味着我们自顶一个imageUrl属性，可以在布局文件中使用。当在布局文件中设置该属性的值发生改变，会自动
+调用loadImage(ImageView view, String url)方法。
+
+布局中使用：
+
+```
+<ImageView
+      android:layout_width="50dp"
+      android:layout_height="50dp"
+      android:background="#f0f0f0"
+      app:imageUrl="@{avatar}"/>
+```
+
+再来看下如何实现：在一个TextView上设置大小不一样的文字(其实是一样的)
+
+```
+@BindingAdapter("spanText")
+public static void setText(TextView textView, String value) {
+    Log.d("BindingAdapter", "setText(TextView textView,String value)");
+    SpannableString styledText = new SpannableString(value);
+    styledText.setSpan(new TextAppearanceSpan(textView.getContext(), R.style.style0),
+            0, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+    styledText.setSpan(new TextAppearanceSpan(textView.getContext(), R.style.style1),
+            5, 12, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+    styledText.setSpan(new TextAppearanceSpan(textView.getContext(), R.style.style0),
+            12, value.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+    textView.setText(styledText, TextView.BufferType.SPANNABLE);
+}
+```
+
+```
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:spanText="@{`Hello Custom Setter`}"/>
+```
+
+注意：使用自定义Setter，需要使用dataBinding语法。以下用法是不对的：
+
+```
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:spanText="Hello Custom Setter"/>
+```
+
+![这里写图片描述](http://img.blog.csdn.net/20160223163407596)
+
+> 其他的例子就不一一在这里介绍了，详情可以查看github上的代码。
 

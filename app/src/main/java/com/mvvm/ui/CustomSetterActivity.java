@@ -18,6 +18,8 @@ import com.mvvm.model.User;
 import com.squareup.picasso.Picasso;
 
 /**
+ *
+ *
  * Created by chiclaim on 2016/02/23
  */
 public class CustomSetterActivity extends BaseActivity {
