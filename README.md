@@ -1,3 +1,5 @@
+[本项目依赖的服务器端代码](https://github.com/chiclaim/android_mvvm_server)
+
 # Awesome-Android-MVVM
 - 什么是MVVM, 为什么需要 MVVM？
 - 如何在android中使用DataBinding实现MVVM架构？
