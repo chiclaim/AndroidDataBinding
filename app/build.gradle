@@ -32,6 +32,7 @@ repositories {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:recyclerview-v7:23.1.1'
@@ -40,10 +41,14 @@ dependencies {
     //snapshot worked with okhttp3.0.1
     //compile 'com.squareup.retrofit2:retrofit:2.0.0-beta4'
     //compile 'com.squareup.retrofit2:converter-gson:2.0.0-beta4'
+    //compile 'com.squareup.retrofit:adapter-rxjava:2.0.0-beta4'
 
     //compile 'com.squareup.retrofit2:retrofit:2.0.0-SNAPSHOT'
     //compile 'com.squareup.retrofit2:converter-gson:2.0.0-SNAPSHOT'
     //compile 'com.squareup.retrofit2:retrofit-converters:2.0.0-SNAPSHOT'
+
+    compile 'com.squareup.retrofit:retrofit:1.9.0'
+    compile 'com.squareup.retrofit:retrofit-converters:1.9.0'
 
     compile 'com.squareup.okhttp3:okhttp:3.0.1'
     compile 'com.squareup.okhttp3:okhttp-urlconnection:3.0.1'
