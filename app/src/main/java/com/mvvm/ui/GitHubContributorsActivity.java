@@ -3,30 +3,35 @@ package com.mvvm.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.widget.TextView;
 
 import com.mvvm.R;
 import com.mvvm.adapter.BaseAdapter;
 import com.mvvm.adapter.ContributorAdapter;
+import com.mvvm.exception.AccessDenyException;
 import com.mvvm.http.ApiServiceFactory;
 import com.mvvm.http.GitHubApi;
+import com.mvvm.http.NetErrorType;
+import com.mvvm.model.AuthToken;
 import com.mvvm.model.Contributor;
 import com.mvvm.utils.DividerItemDecoration;
 import com.mvvm.utils.RecyclerViewUtils;
 
-import java.io.IOException;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import rx.Observable;
+import rx.Observer;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
+
 
 /**
- * Created by chiclaim on 2016/02/18
+ * RxJava+Retrofit1.9, Authorization by token  <br/><br/>
+ * <B>Created by chiclaim on 2016/02/18</B>
  */
 
 public class GitHubContributorsActivity extends BaseActivity {
@@ -37,10 +42,6 @@ public class GitHubContributorsActivity extends BaseActivity {
     public TextView tvTip;
     public BaseAdapter<Contributor> adapter;
     private boolean loading;
-
-    private String nextPage;
-    private boolean isLast;
-    private String lastUrl;
 
 
     private RecyclerView.OnScrollListener scrollListener;
@@ -63,6 +64,7 @@ public class GitHubContributorsActivity extends BaseActivity {
 
     private void initViews() {
 
+        tvTip = (TextView) findViewById(R.id.tv_tips);
         rvContent = (RecyclerView) findViewById(R.id.recyclerView);
         adapter = new ContributorAdapter(this);
         RecyclerViewUtils.setLinearManagerAndAdapter(rvContent, adapter);
@@ -77,18 +79,18 @@ public class GitHubContributorsActivity extends BaseActivity {
                     return;
                 }
                 if (dy > 0) {
-                    LinearLayoutManager mLayoutManager = (LinearLayoutManager)
-                            rvContent.getLayoutManager();
-                    int visibleItemCount = mLayoutManager.getChildCount();
-                    int totalItemCount = mLayoutManager.getItemCount();
-                    int pastVisibleItems = mLayoutManager.findFirstVisibleItemPosition();
-                    if (!isLast && !loading) {
-                        if ((visibleItemCount + pastVisibleItems) >= totalItemCount) {
-                            loading = true;
-                            adapter.showFooter();
-                            requestContributes();
-                        }
-                    }
+//                    LinearLayoutManager mLayoutManager = (LinearLayoutManager)
+//                            rvContent.getLayoutManager();
+//                    int visibleItemCount = mLayoutManager.getChildCount();
+//                    int totalItemCount = mLayoutManager.getItemCount();
+//                    int pastVisibleItems = mLayoutManager.findFirstVisibleItemPosition();
+//                    if (!isLast && !loading) {
+//                        if ((visibleItemCount + pastVisibleItems) >= totalItemCount) {
+//                            loading = true;
+//                            adapter.showFooter();
+//                            requestContributes();
+//                        }
+//                    }
                 }
             }
         };
@@ -96,72 +98,75 @@ public class GitHubContributorsActivity extends BaseActivity {
         rvContent.addOnScrollListener(scrollListener);
     }
 
-
-    public void parseLink(String link) {
-        if (!TextUtils.isEmpty(link)) {
-            String[] sp = link.split(",", 2);
-            String next = sp[0];
-            String last = sp[1];
-            String[] subs = next.split(";", 2);
-
-            if (nextPage != null) {
-                isLast = nextPage.equals(lastUrl);
-            }
-
-            nextPage = subs[0].replaceAll("<|>", "");
-
-            String[] subs2 = last.split(";", 2);
-
-            if ("\"last\"".equals(subs2[1].split("=", 2)[1])) {
-                lastUrl = subs2[0].replaceAll("<|>", "").trim();
-            }
-
-        } else {
-            isLast = true;
-        }
-    }
-
-
-    private void requestContributes() {
-        Call<List<Contributor>> call;
-        if (nextPage == null) {
-            call = gitHubApi.contributors("square", "retrofit");
-        } else {
-            call = gitHubApi.nextContributors(nextPage);
-        }
-        call.enqueue(new Callback<List<Contributor>>() {
+    public Observable<AuthToken> refreshToken() {
+        return Observable.create(new Observable.OnSubscribe<AuthToken>() {
             @Override
-            public void onResponse(Call<List<Contributor>> call, Response<List<Contributor>> response) {
-                loading = false;
-                hideLoadingDialog();
-                if (response.code() == 200) {
-                    List<Contributor> list = response.body();
-                    adapter.appendItems(list);
-                    parseLink(response.headers().get("Link"));
-                    if (isLast) {
-                        adapter.hideFooter();
+            public void call(Subscriber<? super AuthToken> observer) {
+                try {
+                    if (!observer.isUnsubscribed()) {
+                        observer.onNext(gitHubApi.refreshToken());
+                        observer.onCompleted();
                     }
-                } else {
-                    try {
-                        String error = response.errorBody().string();
-                        tvTip.setText(response.code() + error);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                } catch (Exception e) {
+                    observer.onError(e);
                 }
             }
+        }).subscribeOn(Schedulers.io());
+    }
 
+    private <T> Func1<Throwable, ? extends Observable<? extends T>> refreshTokenAndRetry(final Observable<T> toBeResumed) {
+        return new Func1<Throwable, Observable<? extends T>>() {
             @Override
-            public void onFailure(Call<List<Contributor>> call, Throwable t) {
-                loading = false;
-                hideLoadingDialog();
-                t.printStackTrace();
-                tvTip.setText(t.getClass().getName() + "\n" + t.getMessage());
-
-                //java.net.SocketTimeoutException
-                //java.net.UnknownHostException
+            public Observable<? extends T> call(Throwable throwable) {
+                throwable.printStackTrace();
+                // Here check if the error thrown really is a 401
+                if (isHttp401Error(throwable)) {
+                    return refreshToken().flatMap(new Func1<AuthToken, Observable<? extends T>>() {
+                        @Override
+                        public Observable<? extends T> call(AuthToken token) {
+                            return toBeResumed;
+                        }
+                    });
+                }
+                // re-throw this error because it's not recoverable from here
+                return Observable.error(throwable);
             }
-        });
+
+            public boolean isHttp401Error(Throwable throwable) {
+                return throwable instanceof AccessDenyException;
+            }
+
+        };
+    }
+
+    private void requestContributes() {
+        Observable<List<Contributor>> observable = gitHubApi.contributors();
+        observable.onErrorResumeNext(refreshTokenAndRetry(observable))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<List<Contributor>>() {
+                    @Override
+                    public void onCompleted() {
+                        hideLoadingDialog();
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        hideLoadingDialog();
+                        t.printStackTrace();
+                        loading = false;
+                        tvTip.setText(t.getClass().getName() + "\n" + t.getMessage());
+
+                        NetErrorType.ErrorType error = NetErrorType.getErrorType(t);
+                        tvTip.append("\n");
+                        tvTip.append(error.msg);
+                    }
+
+                    public void onNext(List<Contributor> response) {
+                        adapter.appendItems(response);
+                    }
+                });
+
     }
 
     @Override
