@@ -8,6 +8,7 @@ import android.view.View;
 
 import com.mvvm.BR;
 import com.mvvm.R;
+import com.mvvm.databinding.SearchDebounceBinding;
 
 /**
  * 1, 用户修改用户名 , 如果多界面都使用了用户名,则需要在使用的界面同步更新.
@@ -51,6 +52,11 @@ public class MainActivity extends BaseActivity {
 
     public void customSetter(View view) {
         Intent intent = new Intent(this, CustomSetterActivity.class);
+        startActivity(intent);
+    }
+
+    public void searchDebounce(View view){
+        Intent intent = new Intent(this, SearchDebounceActivity.class);
         startActivity(intent);
     }
 }
