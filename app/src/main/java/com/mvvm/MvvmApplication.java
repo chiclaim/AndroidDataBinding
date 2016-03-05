@@ -26,6 +26,7 @@ public class MvvmApplication extends Application {
                     .penaltyDeath()
                     .build());
         }
+
         super.onCreate();
         CrashHandler.getInstance().init(this, "crash_log_mvvm");
     }

@@ -17,7 +17,7 @@ import retrofit.RetrofitError;
 public class ApiServiceFactory {
 
     //private static final String BASE_URL = "http://192.168.2.122:8080/JavaWebHttp2";
-    private static final String BASE_URL = "http://192.168.1.109:8080/JavaWebHttp2";
+    private static final String BASE_URL = "http://192.168.1.109:8080/AndroidMvvmServer";
 
     private static RequestInterceptor requestInterceptor = new RequestInterceptor() {
         @Override

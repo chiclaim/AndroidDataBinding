@@ -28,6 +28,7 @@ public class ConverterActivity extends BaseActivity implements UserFollowEvent {
         user = new User();
         binding.setUser(user);
         binding.setUserFollowEvent(this);
+
     }
 
     @Override
@@ -48,4 +49,5 @@ public class ConverterActivity extends BaseActivity implements UserFollowEvent {
         Log.d("BindingConversion", "convertColorToDrawable:" + color);
         return new ColorDrawable(color);
     }
+
 }

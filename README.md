@@ -1,3 +1,9 @@
+
+##项目整体效果：
+![这里写图片描述](http://img.blog.csdn.net/20160305155616553)
+
+
+
 # Awesome-Android-MVVM
 - 什么是MVVM, 为什么需要 MVVM？
 - 如何在android中使用DataBinding实现MVVM架构？
@@ -81,6 +87,7 @@ Google在2015年的已经为我们DataBinding技术。下面就详细讲解如�
     dataBinding {
         enabled true
     }
+
 
 
 ### 来个简单的例子
@@ -514,11 +521,7 @@ map.put("mobile", "110");
 
 ### 下面通过DataBinding来实现列表
 
-获取square公司retrofit代码贡献者数据列表，通过RecyclerView来实现，效果如下所示：
-
-![Alt text](http://chuantu.biz/t2/26/1455966145x-1566701690.png "MVP Image")
-
-
+获取square公司retrofit代码贡献者数据列表，通过RecyclerView来实现。
 RecyclerView的Adapter实现的核心方法为两个onCreateViewHolder、onBindViewHolder方法和Item的ViewHolder。
 
 ```
@@ -734,8 +737,6 @@ public static void setText(TextView textView, String value) {
     android:layout_height="wrap_content"
     app:spanText="Hello Custom Setter"/>
 ```
-
-![这里写图片描述](http://img.blog.csdn.net/20160223163407596)
 
 > 其他的例子就不一一在这里介绍了，详情可以查看github上的代码。
 
