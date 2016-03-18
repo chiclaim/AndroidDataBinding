@@ -73,7 +73,7 @@ MVC->MVP->MVVP
 ##Android中如何实现MVVM架构？
 Google在2015年的已经为我们DataBinding技术。下面就详细讲解如何使用DataBinding。
 
-### 环境准备
+### 1，环境准备
 在工程根目录build.gradle文件加入如下配置，把Android Gradle 插件升级到最新：
 
 	dependencies {
@@ -91,7 +91,7 @@ Google在2015年的已经为我们DataBinding技术。下面就详细讲解如�
 
 
 
-### 来个简单的例子
+### 2，来个简单的例子
 
 实现上面效果的“Data Binding Simple Sample”
 
@@ -303,7 +303,7 @@ binding.setUser(user);
 ```
 
 
-### 布局详解
+### 3，布局详解
 
 #### import导入
 - 通过<import>标签导入：
@@ -406,7 +406,7 @@ binding.setUser(user);
 
 name.xml 和 contact.xml都必须包含  ` <variable name="user" ../>`
 
-### DataBinding Obervable
+### 4，DataBinding Obervable
 
 在上面的一个例子上，数据是不变，随着用户的与app的交互，数据发生了变化，如何更新某个控件的值呢？
 
@@ -518,7 +518,7 @@ map.put("mobile", "110");
 
 ```
 
-### 下面通过DataBinding来实现列表
+### 5，下面通过DataBinding来实现列表
 
 获取square公司retrofit代码贡献者数据列表，通过RecyclerView来实现。
 RecyclerView的Adapter实现的核心方法为两个onCreateViewHolder、onBindViewHolder方法和Item的ViewHolder。
@@ -575,12 +575,12 @@ Item对应的VIewHolder
 ```
 
 > 在实现这个列表功能我使用了Retrofit+RxJava来做的。在这里引入了token机制，也就是说每个请求都会去把token带过去，然后服务器验证token是否过期，如果过期服务器就会返回403(没有访问权限)，这个时候就需要去请求新的Token，然后再去请求列表数据（目前我在服务器端是设置了10s过期，服务器端代码也放在github上【[github地址](https://github.com/chiclaim/android_mvvm_server)】。
-> 假如不使用RxJava实现这样的嵌套逻辑请求就比较复杂了，如果过期，发起获取新Token的请求，成功去请求列表数据，这种嵌套的回调，可读性很差。关键是只要有请求的地方都需要加上这样的逻辑，当然普通的方式可以实现，只是不够优雅而已。使用RxJava就很优雅了，具体如何实现请查看代码。RxJava功能很强大，以后会通过单独的文章来进行说明。
+> 假如不使用RxJava实现这样的嵌套逻辑请求就比较复杂了，如果过期，发起获取新Token的请求，成功去请求列表数据，这种嵌套的回调，可读性、可维护性很差。并且只要有请求的地方都需要加上这样的逻辑，当然普通的方式可以实现，只是不够优雅而已。使用RxJava就很优雅了，具体如何实现请查看代码。RxJava功能很强大，以后会通过单独的文章来进行说明。
 
 
 
 
-### EL表达式(Expression Language)
+### 6，EL表达式(Expression Language)
 
 ####DataBinding支持的表达式有：
 
