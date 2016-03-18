@@ -92,10 +92,8 @@ Google在2015年的已经为我们DataBinding技术。下面就详细讲解如�
 
 
 ### 来个简单的例子
-实现一个简单的功能，效果如下：
 
-![Alt text](http://chuantu.biz/t2/26/1455968115x-1566701610.png "MVP Image")
-
+实现上面效果的“Data Binding Simple Sample”
 
 ####data binding 布局格式和以往的有些区别：
 
@@ -576,6 +574,12 @@ Item对应的VIewHolder
 
 ```
 
+> 在实现这个列表功能我使用了Retrofit+RxJava来做的。在这里引入了token机制，也就是说每个请求都会去把token带过去，然后服务器验证token是否过期，如果过期服务器就会返回403(没有访问权限)，这个时候就需要去请求新的Token，然后再去请求列表数据（目前我在服务器端是设置了10s过期，服务器端代码也放在github上【[github地址](https://github.com/chiclaim/android_mvvm_server)】。
+> 假如不使用RxJava实现这样的嵌套逻辑请求就比较复杂了，如果过期，发起获取新Token的请求，成功去请求列表数据，这种嵌套的回调，可读性很差。关键是只要有请求的地方都需要加上这样的逻辑，当然普通的方式可以实现，只是不够优雅而已。使用RxJava就很优雅了，具体如何实现请查看代码。RxJava功能很强大，以后会通过单独的文章来进行说明。
+
+
+
+
 ### EL表达式(Expression Language)
 
 ####DataBinding支持的表达式有：
@@ -668,11 +672,11 @@ android:onClick="@{user.isFollow ? event.unFollow : event.follow}"
 
 效果如下所示：
 
-![Alt text](http://chuantu.biz/t2/26/1456026854x-954497741.png "")
+![Alt text](http://img.blog.csdn.net/20160227112258647 "关注前")
 
 点击按钮后：
 
-![Alt text](http://chuantu.biz/t2/26/1456026892x1822611375.png "Image")
+![Alt text](http://img.blog.csdn.net/20160227112357012 "点击按钮后")
 
 
 ### Custom Setter（自定义Setter方法）
