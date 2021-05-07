@@ -46,9 +46,9 @@ Activity、Fragment相当于C (Controller), 布局相当于V（View）, 数据�
 
 
 
-MVP把视图层抽象到View接口，逻辑层抽象到Presenter接口，提到了代码的可读性。降低了视图逻辑和业务逻辑的耦合。
+MVP 把视图层抽象到View接口，逻辑层抽象到 Presenter 接口，提到了代码的可读性。降低了视图逻辑和业务逻辑的耦合。
 
-但是有MVP的不足:
+但是有 MVP 的不足:
 
 1. 接口过多，一定程度影响了编码效率。
 2. 业务逻辑抽抽象到Presenter中，较为复杂的界面Activity代码量依然会很多。 
@@ -95,7 +95,7 @@ Google在2015年的已经为我们DataBinding技术。下面就详细讲解如�
 
 实现上面效果的“Data Binding Simple Sample”
 
-####data binding 布局格式和以往的有些区别：
+#### data binding 布局格式和以往的有些区别：
 
 ```
 <?xml version="1.0" encoding="utf-8"?>
@@ -549,7 +549,7 @@ RecyclerView的Adapter实现的核心方法为两个onCreateViewHolder、onBindV
 getBinding().setVariable(com.mvvm.BR.contributor, contributor)
 大家看到BR.contributor的contributor常量是怎么产生的？布局里的<variable name="">中的name属性值。如：<variable name="book"> 那么就会自动生成BR.book。`有点类似以前的R里面的id`。 有人会问了如果别的实体（model）也有相同的book属性怎么办？那他到底使用哪个呢？其实这是不会冲突，因为在不用的地方用，他的上下文(Binging)不一样，所以不会冲突。也是和以前的R里面的常量是一回事情。只是把它放到BR里面去了。所以我猜想BR的全称应该是（`Binding R`(R就是以前我们用的常量类)）虽然官方没有说明。
 
-通过executePendingBindings强制执行绑定数据。
+通过 executePendingBindings 强制执行绑定数据。
 
 Item对应的VIewHolder
 
@@ -580,7 +580,7 @@ Item对应的VIewHolder
 
 
 
-### 6，EL表达式(Expression Language)
+### 6，EL 表达式(Expression Language)
 
 ####DataBinding支持的表达式有：
 
@@ -656,7 +656,7 @@ public interface UserFollowEvent {
 android:onClick="@{user.isFollow ? event.unFollow : event.follow}"
 ```
 
-在Activity实现该接口UserFollowEvent：
+在 Activity 实现该接口 UserFollowEvent ：
 
 ```
     @Override
