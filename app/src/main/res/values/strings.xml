@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AndroidMvvmSample</string>
+    <string name="app_name">AndroidDataBinding</string>
 
 
     <!-- string format-->

@@ -1,6 +1,6 @@
 package com.mvvm.ui;
 
-import android.databinding.DataBindingUtil;
+import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -18,7 +18,6 @@ import com.mvvm.utils.RecyclerViewUtils;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;

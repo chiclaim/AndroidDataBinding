@@ -1,6 +1,6 @@
 package com.mvvm.model;
 
-import android.databinding.ObservableField;
+import androidx.databinding.ObservableField;
 
 /**
  * Created by chiclaim on 2016/02/18

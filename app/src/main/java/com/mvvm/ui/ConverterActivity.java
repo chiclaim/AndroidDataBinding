@@ -1,7 +1,7 @@
 package com.mvvm.ui;
 
-import android.databinding.BindingConversion;
-import android.databinding.DataBindingUtil;
+import androidx.databinding.BindingConversion;
+import androidx.databinding.DataBindingUtil;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,7 +9,6 @@ import android.view.View;
 
 import com.mvvm.R;
 import com.mvvm.databinding.ConverterBinding;
-import com.mvvm.databinding.CustomSetterBinding;
 import com.mvvm.event.UserFollowEvent;
 import com.mvvm.model.User;
 

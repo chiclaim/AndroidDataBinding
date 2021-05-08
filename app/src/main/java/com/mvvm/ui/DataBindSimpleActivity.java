@@ -1,6 +1,6 @@
 package com.mvvm.ui;
 
-import android.databinding.DataBindingUtil;
+import androidx.databinding.DataBindingUtil;
 import android.os.AsyncTask;
 import android.os.Bundle;
 

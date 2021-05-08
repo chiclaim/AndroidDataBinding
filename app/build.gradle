@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    compileSdkVersion 30
+    buildToolsVersion "29.0.3"
 
     dataBinding {
         enabled true
@@ -12,7 +12,7 @@ android {
     defaultConfig {
         applicationId "com.mvvm"
         minSdkVersion 15
-        targetSdkVersion 23
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
     }
@@ -33,9 +33,9 @@ repositories {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.1.1'
-    compile 'com.android.support:recyclerview-v7:23.1.1'
+    testImplementation 'junit:junit:4.12'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
 
     //http module
     //snapshot worked with okhttp3.0.1
@@ -47,20 +47,20 @@ dependencies {
     //compile 'com.squareup.retrofit2:converter-gson:2.0.0-SNAPSHOT'
     //compile 'com.squareup.retrofit2:retrofit-converters:2.0.0-SNAPSHOT'
 
-    compile 'com.squareup.retrofit:retrofit:1.9.0'
-    compile 'com.squareup.retrofit:retrofit-converters:1.9.0'
+    implementation 'com.squareup.retrofit:retrofit:1.9.0'
+    implementation 'com.squareup.retrofit:retrofit-converters:1.9.0'
 
-    compile 'com.squareup.okhttp3:okhttp:3.0.1'
-    compile 'com.squareup.okhttp3:okhttp-urlconnection:3.0.1'
-    compile 'com.squareup.okhttp3:logging-interceptor:3.0.1'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
+    implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.0.1'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
 
     //image utils
-    compile 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'com.squareup.picasso:picasso:2.5.2'
 
     //RxJava
-    compile 'io.reactivex:rxandroid:1.0.1'
-    compile 'io.reactivex:rxjava:1.0.14'
-    compile 'io.reactivex:rxjava-math:1.0.0'
-    compile 'com.jakewharton.rxbinding:rxbinding:0.2.0'
+    implementation 'io.reactivex:rxandroid:1.2.1'
+    implementation 'io.reactivex:rxjava:1.3.0'
+    implementation 'io.reactivex:rxjava-math:1.0.0'
+    implementation 'com.jakewharton.rxbinding:rxbinding:1.0.0'
 
 }

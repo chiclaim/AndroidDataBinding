@@ -2,13 +2,12 @@ package com.mvvm.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
+import androidx.appcompat.app.ActionBar;
 import android.util.Log;
 import android.view.View;
 
 import com.mvvm.BR;
 import com.mvvm.R;
-import com.mvvm.databinding.SearchDebounceBinding;
 
 /**
  * 1, 用户修改用户名 , 如果多界面都使用了用户名,则需要在使用的界面同步更新.

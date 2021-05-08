@@ -2,11 +2,9 @@ package com.mvvm.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.MenuItem;
-
-import com.mvvm.ui.LoadingDialog;
 
 /**
  * Created by chiclaim on 2016/02/18
